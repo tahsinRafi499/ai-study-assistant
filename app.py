@@ -8,7 +8,7 @@ from sentence_transformers import SentenceTransformer
 st.title("📚 AI Study Assistant")
 
 # ---------------- API SETUP ----------------
-API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2"
+API_URL = "https://api-inference.huggingface.co/models/microsoft/phi-2"
 import os
 
 headers = {
@@ -17,10 +17,9 @@ headers = {
 
 def query_model(prompt):
     response = requests.post(
-        "https://api-inference.huggingface.co/models",
+        API_URL,
         headers=headers,
         json={
-            "model": "mistralai/Mistral-7B-Instruct-v0.2",
             "inputs": prompt,
             "parameters": {
                 "max_new_tokens": 200,
@@ -28,6 +27,17 @@ def query_model(prompt):
             }
         }
     )
+
+    if response.status_code != 200:
+        return f"❌ Error {response.status_code}: {response.text}"
+
+    result = response.json()
+
+    # Hugging Face returns list of dicts
+    if isinstance(result, list):
+        return result[0].get("generated_text", "")
+    
+    return str(result)    )
 
     if response.status_code != 200:
         return f"❌ Error {response.status_code}: {response.text}"
