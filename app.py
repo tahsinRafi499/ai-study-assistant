@@ -23,7 +23,7 @@ def query_model(prompt):
     )
 
     if response.status_code != 200:
-        return "❌ API Error"
+        return f"❌ Error {response.status_code}: {response.text}"
 
     result = response.json()
 
