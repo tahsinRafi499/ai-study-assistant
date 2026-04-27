@@ -36,17 +36,7 @@ def query_model(prompt):
     # Hugging Face returns list of dicts
     if isinstance(result, list):
         return result[0].get("generated_text", "")
-    
-    return str(result)    )
 
-    if response.status_code != 200:
-        return f"❌ Error {response.status_code}: {response.text}"
-
-    result = response.json()
-
-    if isinstance(result, list):
-        return result[0].get("generated_text", "")
-    
     return str(result)
 
 # ---------------- EMBEDDING ----------------
