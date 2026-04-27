@@ -8,7 +8,7 @@ from sentence_transformers import SentenceTransformer
 st.title("📚 AI Study Assistant")
 
 # ---------------- API SETUP ----------------
-API_URL = "https://api-inference.huggingface.co/models/google/gemma-2b-it"
+API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2"
 import os
 
 headers = {
