@@ -17,9 +17,16 @@ headers = {
 
 def query_model(prompt):
     response = requests.post(
-        API_URL,
+        "https://api-inference.huggingface.co/models",
         headers=headers,
-        json={"inputs": prompt}
+        json={
+            "model": "mistralai/Mistral-7B-Instruct-v0.2",
+            "inputs": prompt,
+            "parameters": {
+                "max_new_tokens": 200,
+                "temperature": 0.7
+            }
+        }
     )
 
     if response.status_code != 200:
@@ -29,6 +36,7 @@ def query_model(prompt):
 
     if isinstance(result, list):
         return result[0].get("generated_text", "")
+    
     return str(result)
 
 # ---------------- EMBEDDING ----------------
