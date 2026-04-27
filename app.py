@@ -16,7 +16,7 @@ client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 def query_model(prompt):
     try:
         response = client.chat.completions.create(
-            model="llama3-8b-8192",   # free + fast
+            model="llama-3.1-8b-instant",   # free + fast
             messages=[
                 {"role": "user", "content": prompt}
             ]
