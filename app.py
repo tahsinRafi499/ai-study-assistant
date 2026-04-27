@@ -8,38 +8,28 @@ from sentence_transformers import SentenceTransformer
 st.title("📚 AI Study Assistant")
 
 # ---------------- API SETUP ----------------
-API_URL = "https://api-inference.huggingface.co/models/microsoft/phi-2"
+
+from groq import Groq
 import os
 
-headers = {
-    "Authorization": f"Bearer {os.getenv('HF_tQpCRJMDTgziOCCbfRRsWbONJlMkNfVWil')}"
-}
-
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 def query_model(prompt):
-    response = requests.post(
-        API_URL,
-        headers=headers,
-        json={
-            "inputs": prompt,
-            "parameters": {
-                "max_new_tokens": 200,
-                "temperature": 0.7
-            }
-        }
-    )
+    try:
+        response = client.chat.completions.create(
+            model="llama3-8b-8192",   # free + fast
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
 
-    if response.status_code != 200:
-        return f"❌ Error {response.status_code}: {response.text}"
+        return response.choices[0].message.content
 
-    result = response.json()
+    except Exception as e:
+        return f"❌ Error: {str(e)}"
 
-    # Hugging Face returns list of dicts
-    if isinstance(result, list):
-        return result[0].get("generated_text", "")
-
-    return str(result)
 
 # ---------------- EMBEDDING ----------------
+
 @st.cache_resource
 def load_embedder():
     return SentenceTransformer('all-MiniLM-L6-v2')
